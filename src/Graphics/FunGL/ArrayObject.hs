@@ -1,12 +1,9 @@
 module Graphics.FunGL.ArrayObject
   ( someFunc
-
-  -- | VAO
   , ArrayObject
   , newArrayObject
   , bindArrayObject
   , deleteArrayObject
-  
   ) where
 
 import Foreign.Storable (peek)

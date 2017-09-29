@@ -17,6 +17,8 @@ library
   hs-source-dirs:      src
   exposed-modules:     Graphics.FunGL
                      , Graphics.FunGL.ArrayObject
+                     , Graphics.FunGL.BufferObject
+                     , Graphics.FunGL.ShaderProgram
   build-depends:       base >= 4.7 && < 5
                      , OpenGLRaw
   default-language:    Haskell2010
