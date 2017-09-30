@@ -1,9 +1,10 @@
 module Graphics.FunGL.BufferObject
   (
     BufferObject
-  , BufferType
+  , BufferType(..)
   , makeBuffer
   , bindBuffer
+  , deleteBuffer
   , bindBufferToAttribute
   ) where
 
@@ -11,6 +12,8 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Marshal (alloca, with, withArray, fromBool)
 import Foreign.Storable (Storable, peek, sizeOf)
+
+import Graphics.FunGL.ShaderProgram
 
 import Graphics.GL
 
@@ -52,14 +55,16 @@ deleteBuffer bufferObject = do
   with (fromBufferObject bufferObject) $ glDeleteBuffers 1
 
 -- | bind buffer to attribute
-bindBufferToAttribute :: BufferObject -> GLuint -> IO ()
+bindBufferToAttribute :: BufferObject -> AttrLoc -> IO ()
 bindBufferToAttribute bufferObject attribLoc = do
-  glEnableVertexAttribArray attribLoc
+  glEnableVertexAttribArray $ fromAttrLoc attribLoc
   glBindBuffer GL_ARRAY_BUFFER (fromBufferObject bufferObject)
   glVertexAttribPointer
-    attribLoc -- attribute location in the shader
+    (fromAttrLoc attribLoc) -- attribute location in the shader
     3 -- 3 components per vertex (x,y,z)
     GL_FLOAT -- coord type
     (fromBool False) -- normalize?
     0
     nullPtr
+
+

@@ -1,6 +1,6 @@
 module Graphics.FunGL.ArrayObject
   ( someFunc
-  , ArrayObject
+  , ArrayObject(..)
   , newArrayObject
   , bindArrayObject
   , deleteArrayObject
