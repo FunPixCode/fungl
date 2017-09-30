@@ -123,8 +123,11 @@ draw model time = do
   bindProgram (program model)
 
   -- the (fromBool True) is because we are ROW-first (Data.Vec)
-  with mvpMatrix $
-    glUniformMatrix4fv (fromUniformLoc (mvpUniformLoc model)) 1 (fromBool True) . castPtr
+  -- with mvpMatrix $
+    -- glUniformMatrix4fv (fromUniformLoc (mvpUniformLoc model)) 1 (fromBool True) . castPtr
+
+  with (mvpMatrix') $
+    glUniformMatrix4fv (fromUniformLoc (mvpUniformLoc model)) 1 (fromBool True) . castMatComponent
 
   bindArrayObject (arrayObject model)
 
@@ -134,7 +137,10 @@ draw model time = do
   
   bindProgram (ShaderProgram 0)
   
-  
+
+castMatComponent :: Ptr (t (f a)) -> Ptr a
+castMatComponent = castPtr
+
 vertexBufferData :: [Float]
 vertexBufferData = [ -1, -1, 0
                    ,  1, -1, 0
@@ -202,3 +208,18 @@ lookAt eye target up = x :. y :. z :. h :. ()
     y = snoc up' (-(dot up' eye))
     z = snoc (-forward) (dot forward eye)
     h = 0 :. 0 :. 0 :. 1 :. ()
+
+cameraPos :: L.V3 Float
+cameraPos = L.V3 4 3 3 -- eye
+
+cameraTarget :: L.V3 Float
+cameraTarget = L.V3 0 0 0 -- look at coord
+
+up :: L.V3 Float
+up = L.V3 0 1 0
+
+mvpMatrix' :: L.M44 Float
+mvpMatrix' = p L.!*! v
+  where
+    p = L.perspective (60 * 3.14/180) (3.14/4) 0.1 100
+    v = L.lookAt cameraPos cameraTarget up
