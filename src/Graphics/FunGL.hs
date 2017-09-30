@@ -19,12 +19,16 @@ module Graphics.FunGL
   , AttrLoc(..)
   , UniformLoc(..)
   , ShaderProgram(..)
+
   , makeShaderProgram
   , bindProgram
   , deleteProgram
+
   , bindAttribLocation
   , getAttribLocation
   , getUniformLocation
+
+  , bindUniform4f
 
     -- | rendering helpers
   , clearColor

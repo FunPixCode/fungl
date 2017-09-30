@@ -2,12 +2,16 @@ module Graphics.FunGL.ShaderProgram
   ( AttrLoc(..)
   , UniformLoc(..)
   , ShaderProgram(..)
+
   , makeShaderProgram
   , bindProgram
   , deleteProgram
+
   , bindAttribLocation
   , getAttribLocation
   , getUniformLocation
+
+  , bindUniform4f
   ) where
 
 import Foreign.Ptr
@@ -16,6 +20,8 @@ import Foreign.Marshal
 import Foreign.Storable
 import Control.Exception
 import Control.Monad (when, forM_, liftM)
+
+import Linear
 
 import Graphics.GL
 
@@ -108,3 +114,21 @@ getUniformLocation prog name = do
   if loc < 0
     then error $ "`" ++ name ++ "` can not be found!"
     else return $ UniformLoc (fromIntegral loc)
+
+
+-- | Uniforms
+
+castMatComponent :: Ptr (t (f a)) -> Ptr a
+castMatComponent = castPtr
+
+castVecComponent :: Ptr (t a) -> Ptr a
+castVecComponent = castPtr
+
+-- | bind uniform 4f (4x4 matrix) , fromBool True for because row-first
+bindUniform4f :: M44 Float -> UniformLoc -> IO ()
+bindUniform4f matrix loc = do
+  with matrix $ glUniformMatrix4fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
+
+bindUniform3f :: M33 Float -> UniformLoc -> IO ()
+bindUniform3f matrix loc = do
+  with matrix $ glUniformMatrix4fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent

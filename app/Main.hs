@@ -14,6 +14,7 @@ import System.Exit (exitFailure)
 
 import Graphics.FunGL
 import qualified Linear as L
+import Data.IORef
 import Graphics.GL -- temporary for uniform
 
 import Foreign
@@ -89,18 +90,30 @@ main = do
   win <- initialize
   model <- initializeGL
 
-  inputLoop win model
+  t <- maybe 0 id <$> GLFW.getTime
+  lastTime <- newIORef (t)
+  nbFrames <- newIORef (0 :: Int)
+  inputLoop win model (lastTime, nbFrames)
 
   -- free
   GLFW.terminate
   return ()
 
-inputLoop :: GLFW.Window -> Model -> IO ()
-inputLoop win model = do
+inputLoop :: GLFW.Window -> Model -> (IORef (Double), IORef (Int)) -> IO ()
+inputLoop win model a@(lastTime, nbFrames) = do
 
-  t <- maybe 0 id <$> GLFW.getTime -- time in seconds since program launch
+  currentTime <- maybe 0 id <$> GLFW.getTime -- time in seconds since program launch
   
-  draw model t
+  draw model currentTime
+
+  -- frames
+  modifyIORef nbFrames (+1)
+  x <- readIORef lastTime
+  when (currentTime - x >= 1.0) $ do
+    nf <- readIORef nbFrames
+    putStrLn $ (show (1000.0/(realToFrac nf))) ++ "ms per frame, FPS: " ++ show nf
+    writeIORef nbFrames 0
+    modifyIORef lastTime (+1.0)
 
   GLFW.swapBuffers win
   GLFW.pollEvents
@@ -109,25 +122,17 @@ inputLoop win model = do
   closeWindow <- GLFW.windowShouldClose win
 
   when (keyState /= GLFW.KeyState'Pressed && closeWindow == False) $
-    inputLoop win model
+    inputLoop win model a
 
 draw :: Model -> Double -> IO ()
 draw model time = do
-
-  -- print time
-
   clearColorBuffer
   clearDepthBuffer
 
   -- bind program to current context
   bindProgram (program model)
 
-  -- the (fromBool True) is because we are ROW-first (Data.Vec)
-  -- with mvpMatrix $
-    -- glUniformMatrix4fv (fromUniformLoc (mvpUniformLoc model)) 1 (fromBool True) . castPtr
-
-  with (mvpMatrix') $
-    glUniformMatrix4fv (fromUniformLoc (mvpUniformLoc model)) 1 (fromBool True) . castMatComponent
+  bindUniform4f mvpMatrix' (mvpUniformLoc model)
 
   bindArrayObject (arrayObject model)
 
@@ -210,7 +215,7 @@ lookAt eye target up = x :. y :. z :. h :. ()
     h = 0 :. 0 :. 0 :. 1 :. ()
 
 cameraPos :: L.V3 Float
-cameraPos = L.V3 4 3 3 -- eye
+cameraPos = L.V3 0 0 3 -- eye
 
 cameraTarget :: L.V3 Float
 cameraTarget = L.V3 0 0 0 -- look at coord
@@ -219,7 +224,15 @@ up :: L.V3 Float
 up = L.V3 0 1 0
 
 mvpMatrix' :: L.M44 Float
-mvpMatrix' = p L.!*! v
+mvpMatrix' = p L.!*! v L.!*! modelMatrix'
   where
     p = L.perspective (60 * 3.14/180) (3.14/4) 0.1 100
     v = L.lookAt cameraPos cameraTarget up
+
+modelMatrix' :: L.M44 Float
+modelMatrix' = L.V4
+               (L.V4 1 0 0 0)
+               (L.V4 0 1 0 0)
+               (L.V4 0 0 0 0)
+               (L.V4 0 0 0 1)
+               
