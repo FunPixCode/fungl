@@ -11,7 +11,9 @@ module Graphics.FunGL.ShaderProgram
   , getAttribLocation
   , getUniformLocation
 
-  , bindUniform4f
+  , bindUniform44f
+  , bindUniform33f
+  , bindUniform22f
   ) where
 
 import Foreign.Ptr
@@ -125,10 +127,14 @@ castVecComponent :: Ptr (t a) -> Ptr a
 castVecComponent = castPtr
 
 -- | bind uniform 4f (4x4 matrix) , fromBool True for because row-first
-bindUniform4f :: M44 Float -> UniformLoc -> IO ()
-bindUniform4f matrix loc = do
+bindUniform44f :: M44 Float -> UniformLoc -> IO ()
+bindUniform44f matrix loc = do
   with matrix $ glUniformMatrix4fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
 
-bindUniform3f :: M33 Float -> UniformLoc -> IO ()
-bindUniform3f matrix loc = do
-  with matrix $ glUniformMatrix4fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
+bindUniform33f :: M33 Float -> UniformLoc -> IO ()
+bindUniform33f matrix loc = do
+  with matrix $ glUniformMatrix3fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
+
+bindUniform22f :: M22 Float -> UniformLoc -> IO ()
+bindUniform22f matrix loc = do
+  with matrix $ glUniformMatrix2fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent

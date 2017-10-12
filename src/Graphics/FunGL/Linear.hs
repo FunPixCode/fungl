@@ -11,3 +11,4 @@ castMatComponent = castPtr
 
 castVecComponent :: Ptr (t a) -> Ptr a
 castVecComponent = castPtr
+

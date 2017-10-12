@@ -28,7 +28,9 @@ module Graphics.FunGL
   , getAttribLocation
   , getUniformLocation
 
-  , bindUniform4f
+  , bindUniform44f
+  , bindUniform33f
+  , bindUniform22f
 
     -- | rendering helpers
   , clearColor

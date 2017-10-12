@@ -132,7 +132,7 @@ draw model time = do
   -- bind program to current context
   bindProgram (program model)
 
-  bindUniform4f mvpMatrix' (mvpUniformLoc model)
+  bindUniform44f mvpMatrix' (mvpUniformLoc model)
 
   bindArrayObject (arrayObject model)
 
