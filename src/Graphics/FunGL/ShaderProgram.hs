@@ -1,6 +1,6 @@
 module Graphics.FunGL.ShaderProgram
   ( AttrLoc(..)
-  , UniformLoc(..)
+  
   , ShaderProgram(..)
 
   , makeShaderProgram
@@ -9,11 +9,7 @@ module Graphics.FunGL.ShaderProgram
 
   , bindAttribLocation
   , getAttribLocation
-  , getUniformLocation
-
-  , bindUniform44f
-  , bindUniform33f
-  , bindUniform22f
+  , 
   ) where
 
 import Foreign.Ptr
@@ -23,12 +19,10 @@ import Foreign.Storable
 import Control.Exception
 import Control.Monad (when, forM_, liftM)
 
-import Linear
-
 import Graphics.GL
 
 newtype AttrLoc = AttrLoc { fromAttrLoc :: GLuint }
-newtype UniformLoc = UniformLoc { fromUniformLoc :: GLint }
+
 
 newtype ShaderProgram = ShaderProgram { fromShaderProgram :: GLuint }
 
@@ -109,32 +103,3 @@ getAttribLocation prog name = do
     then error $ "`" ++ name ++ "` can not be found!"
     else return $ AttrLoc (fromIntegral loc)
 
--- | Bind uniform name to location specified by OpenGL
-getUniformLocation :: ShaderProgram -> String -> IO UniformLoc
-getUniformLocation prog name = do
-  loc <- withCString name $ glGetUniformLocation $ fromShaderProgram prog
-  if loc < 0
-    then error $ "`" ++ name ++ "` can not be found!"
-    else return $ UniformLoc (fromIntegral loc)
-
-
--- | Uniforms
-
-castMatComponent :: Ptr (t (f a)) -> Ptr a
-castMatComponent = castPtr
-
-castVecComponent :: Ptr (t a) -> Ptr a
-castVecComponent = castPtr
-
--- | bind uniform 4f (4x4 matrix) , fromBool True for because row-first
-bindUniform44f :: M44 Float -> UniformLoc -> IO ()
-bindUniform44f matrix loc = do
-  with matrix $ glUniformMatrix4fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
-
-bindUniform33f :: M33 Float -> UniformLoc -> IO ()
-bindUniform33f matrix loc = do
-  with matrix $ glUniformMatrix3fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent
-
-bindUniform22f :: M22 Float -> UniformLoc -> IO ()
-bindUniform22f matrix loc = do
-  with matrix $ glUniformMatrix2fv (fromUniformLoc loc) 1 (fromBool False) . castMatComponent

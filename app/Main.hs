@@ -63,8 +63,11 @@ initializeGL = do
 
   program <- makeShaderProgram vertexShader2 fragmentShader2
 
+  -- get slots for attributes
   vertexAttribLoc <- getAttribLocation program "vertexPosition_modelspace"
   colorAttribLoc <- getAttribLocation program "vertexColor"
+
+  -- get slot for uniform
   mvpUniformLoc <- getUniformLocation program "MVP"
 
   -- prepare VBO ids

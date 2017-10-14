@@ -17,7 +17,6 @@ module Graphics.FunGL
 
     -- | shader program
   , AttrLoc(..)
-  , UniformLoc(..)
   , ShaderProgram(..)
 
   , makeShaderProgram
@@ -26,8 +25,12 @@ module Graphics.FunGL
 
   , bindAttribLocation
   , getAttribLocation
-  , getUniformLocation
 
+  -- | uniforms 
+  , UniformLoc(..)
+  , getUniformLocation
+  , bindUniform1f
+  , bindUniform1i
   , bindUniform44f
   , bindUniform33f
   , bindUniform22f
@@ -43,3 +46,4 @@ import Graphics.FunGL.ArrayObject
 import Graphics.FunGL.BufferObject
 import Graphics.FunGL.ShaderProgram
 import Graphics.FunGL.Render
+import Graphics.FunGL.Uniforms
