@@ -67,5 +67,3 @@ bindBufferToAttribute bufferObject attribLoc = do
     (fromBool False) -- normalize?
     0
     nullPtr
-
-

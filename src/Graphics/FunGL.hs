@@ -21,7 +21,7 @@ module Graphics.FunGL
   , bindProgram
   , deleteProgram
 
-  -- | uniforms 
+  -- | uniforms
   , UniformLoc(..)
   , getUniformLocation
   , bindUniform1f
@@ -40,7 +40,8 @@ module Graphics.FunGL
   , clearColorBuffer
   , clearDepthBuffer
   , drawArrays
-  
+  , drawIndex
+
   ) where
 
 import Graphics.FunGL.ArrayObject

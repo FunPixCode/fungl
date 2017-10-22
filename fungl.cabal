@@ -40,6 +40,18 @@ executable fungl-exe
                      , linear
   default-language:    Haskell2010
 
+executable fungl-draw-index
+  hs-source-dirs:      app, .
+  main-is:             draw-index-example/DrawTriangleIndex.hs
+  ghc-options:         -O2 -Wall
+  build-depends:       base
+                     , fungl
+                     , GLFW-b
+                     , Vec
+                     , OpenGLRaw
+                     , linear
+  default-language:    Haskell2010
+
 test-suite fungl-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
