@@ -135,15 +135,19 @@ draw model time = do
   -- bind program to current context
   bindProgram (program model)
 
+  -- bind mvp matrix
   bindUniform44f mvpMatrix' (mvpUniformLoc model)
 
+  -- bind VAO
   bindArrayObject (arrayObject model)
 
-  -- glDrawArrays GL_TRIANGLES 0 3
+  -- render
   drawArrays 3
 
+  -- unbind VAO
   bindArrayObject (ArrayObject 0)
-  
+
+  -- unbind program
   bindProgram (ShaderProgram 0)
   
 
