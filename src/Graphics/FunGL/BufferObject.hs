@@ -14,6 +14,7 @@ import Foreign.Marshal (alloca, with, withArray, fromBool)
 import Foreign.Storable (Storable, peek, sizeOf)
 
 import Graphics.FunGL.ShaderProgram
+import Graphics.FunGL.Attributes
 
 import Graphics.GL
 

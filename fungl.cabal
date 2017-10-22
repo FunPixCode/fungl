@@ -22,6 +22,7 @@ library
                      , Graphics.FunGL.Render
                      , Graphics.FunGL.Linear
                      , Graphics.FunGL.Uniforms
+                     , Graphics.FunGL.Attributes
   build-depends:       base >= 4.7 && < 5
                      , OpenGLRaw
                      , linear

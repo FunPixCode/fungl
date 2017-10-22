@@ -16,15 +16,10 @@ module Graphics.FunGL
   , bindBufferToAttribute
 
     -- | shader program
-  , AttrLoc(..)
   , ShaderProgram(..)
-
   , makeShaderProgram
   , bindProgram
   , deleteProgram
-
-  , bindAttribLocation
-  , getAttribLocation
 
   -- | uniforms 
   , UniformLoc(..)
@@ -35,7 +30,12 @@ module Graphics.FunGL
   , bindUniform33f
   , bindUniform22f
 
-    -- | rendering helpers
+  -- | attributes
+  , AttrLoc(..)
+  , bindAttribLocation
+  , getAttribLocation
+
+  -- | rendering helpers
   , clearColor
   , clearColorBuffer
   , clearDepthBuffer
@@ -48,3 +48,4 @@ import Graphics.FunGL.BufferObject
 import Graphics.FunGL.ShaderProgram
 import Graphics.FunGL.Render
 import Graphics.FunGL.Uniforms
+import Graphics.FunGL.Attributes
