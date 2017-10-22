@@ -139,7 +139,8 @@ draw model time = do
 
   bindArrayObject (arrayObject model)
 
-  glDrawArrays GL_TRIANGLES 0 3
+  -- glDrawArrays GL_TRIANGLES 0 3
+  drawArrays 3
 
   bindArrayObject (ArrayObject 0)
   

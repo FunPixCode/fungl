@@ -1,15 +1,11 @@
 module Graphics.FunGL.ShaderProgram
   ( AttrLoc(..)
-  
   , ShaderProgram(..)
-
   , makeShaderProgram
   , bindProgram
   , deleteProgram
-
   , bindAttribLocation
   , getAttribLocation
-  , 
   ) where
 
 import Foreign.Ptr
@@ -22,7 +18,6 @@ import Control.Monad (when, forM_, liftM)
 import Graphics.GL
 
 newtype AttrLoc = AttrLoc { fromAttrLoc :: GLuint }
-
 
 newtype ShaderProgram = ShaderProgram { fromShaderProgram :: GLuint }
 
@@ -56,7 +51,7 @@ makeShaderProgram vertexShaderSrc fragmentShaderSrc = do
 
 compileShader :: String -> GLenum -> IO GLuint
 compileShader src shaderType = do
-  -- denerate shader id
+  -- generate shader id
   shaderId <- glCreateShader shaderType
 
   withCString src $ \srcPtr ->

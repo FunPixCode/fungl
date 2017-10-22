@@ -39,6 +39,7 @@ module Graphics.FunGL
   , clearColor
   , clearColorBuffer
   , clearDepthBuffer
+  , drawArrays
   
   ) where
 
